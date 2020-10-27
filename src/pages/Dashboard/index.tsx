@@ -35,7 +35,15 @@ const Dashboard: React.FC = () => {
 
   useEffect(() => {
     async function loadProducts(): Promise<void> {
-      // TODO
+      const { data } = await api.get('/products');
+
+      const formattedProducts = data.map((product: Product) => ({
+        ...product,
+        price: formatValue(product.price),
+      }));
+
+      setProducts(formattedProducts);
+      console.log(products);
     }
 
     loadProducts();
@@ -60,7 +68,7 @@ const Dashboard: React.FC = () => {
               <ProductImage source={{ uri: item.image_url }} />
               <ProductTitle>{item.title}</ProductTitle>
               <PriceContainer>
-                <ProductPrice>{formatValue(item.price)}</ProductPrice>
+                <ProductPrice>{item.price}</ProductPrice>
                 <ProductButton
                   testID={`add-to-cart-${item.id}`}
                   onPress={() => handleAddToCart(item)}
